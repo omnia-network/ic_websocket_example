@@ -1,7 +1,7 @@
 import "./styles.css";
 import IcWebSocket from "ic-websocket-js";
 import addNotification from "./utils/addNotification";
-import { ic_websocket_example_backend } from "../../declarations/ic_websocket_example_backend";
+import { createActor } from "../../declarations/ic_websocket_example_backend";
 
 // production
 const gatewayAddress = "wss://icws.io";
@@ -13,6 +13,12 @@ const icUrl = "https://icp0.io";
 const backendCanisterId = process.env.CANISTER_ID_IC_WEBSOCKET_EXAMPLE_BACKEND || "";
 const localTest = true;
 const persistKey = false;
+
+const ic_websocket_example_backend = createActor(backendCanisterId, {
+  agentOptions: {
+    host: icUrl,
+  }
+});
 
 let messageCount = 0;
 
