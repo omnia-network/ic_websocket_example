@@ -1,6 +1,7 @@
 import "./styles.css";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import IcWebSocket from "ic-websocket-js";
-import addNotification from "./utils/addNotification";
+import addMessageToUI from "./utils/addNotification";
 import { createActor } from "../../declarations/ic_websocket_example_backend";
 
 // production
@@ -55,8 +56,8 @@ ws.onopen = () => {
   document.getElementById("ws-status-content")!.textContent = "WebSocket connected";
 };
 
-ws.onmessage = (event: MessageEvent<{ text: string }>) => {
-  addNotification(event.data.text, 'backend');
+ws.onmessage = (event: MessageEvent<{ text: string; timestamp: number; }>) => {
+  addMessageToUI(event.data, 'backend');
 
   messageCount += 1;
 
@@ -67,11 +68,13 @@ ws.onmessage = (event: MessageEvent<{ text: string }>) => {
 
   setTimeout(async () => {
     console.log(messageCount);
-    const pong = event.data.text + "-pong";
-    addNotification(pong, 'frontend');
+    const newText = event.data.text + "-pong";
+    event.data.text = newText;
+    addMessageToUI(event.data, 'frontend');
 
     await ws.send({
-      text: pong,
+      text: newText,
+      timestamp: Date.now() * (10 ** 6),
     });
 
   }, 1000);

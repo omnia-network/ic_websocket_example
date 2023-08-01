@@ -121,11 +121,17 @@ h1 {
 .message {
   width: 100%;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   text-align: left;
   gap: 0.5rem;
   padding: 0.5rem 1rem;
+}
+.message i {
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5rem;
 }
 .message.from-frontend {
   color: #000;
@@ -138,8 +144,14 @@ h1 {
 .message.loading {
   color: #444444;
 }
-.message-time {
-  max-width: 30%;
+.message-before {
+  min-width: 35%;
+  display: flex;
+  flex-direction: column;
+}
+.message-latency {
+  font-size: 0.75rem;
+  color: #acacac;
 }
 
 button {
@@ -181,7 +193,7 @@ button:focus-visible {
 
   .container {
     width: 60%;
-    min-height: 60vh;
+    min-height: 40vh;
   }
 
   #ws-status {
@@ -189,6 +201,10 @@ button:focus-visible {
   }
 
   .message {
-    padding: 1rem 1.5rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .message-before {
+    min-width: 20%;
   }
 }

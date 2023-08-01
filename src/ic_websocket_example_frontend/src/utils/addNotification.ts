@@ -1,17 +1,9 @@
 import { capitalCase } from "change-case";
 
-export default function addNotification(text: string, from: 'backend' | 'frontend', messageId?: string) {
-  const currentDate = new Date();
-  const formattedTime = new Intl.DateTimeFormat("default", {
-    hour: "numeric",
-    minute: "numeric",
-    second: "numeric",
-    hour12: false
-  }).format(currentDate);
-
-  const isLoading = from === 'frontend' && text === ''
+export default function addMessageToUI(message: { text: string; timestamp: number; }, from: 'backend' | 'frontend', messageId?: string) {
+  const isLoading = from === 'frontend' && message.text === ''
   if (isLoading) {
-    text = 'Sending pong...';
+    message.text = 'Sending pong...';
   }
 
   const newMessage = document.createElement("div");
@@ -19,7 +11,7 @@ export default function addNotification(text: string, from: 'backend' | 'fronten
   if (messageId) {
     const existingMessage = document.getElementById(messageId);
     if (existingMessage) {
-      existingMessage.getElementsByClassName("message-text")[0].textContent = text;
+      existingMessage.getElementsByClassName("message-text")[0].textContent = message.text;
       existingMessage.classList.remove("loading");
 
       return;
@@ -28,10 +20,25 @@ export default function addNotification(text: string, from: 'backend' | 'fronten
     newMessage.id = messageId;
   }
 
+  let latencySpan = '';
+
+  if (from === 'backend') {
+    const latencyMs = Date.now() - (message.timestamp / (10 ** 6));
+
+    latencySpan = `
+    <span class="message-latency">(latency: ${Math.floor(latencyMs)}ms)</span>
+    `;
+  }
+
+  const iconName = from === 'backend' ? 'arrow-right' : 'arrow-left';
+
   newMessage.classList.value = `message from-${from} ${isLoading ? 'loading' : ''}`;
   newMessage.innerHTML = `
-    <span class="message-time">[${formattedTime}]: ${capitalCase(from)}</span>
-    <span class="message-text">${text}</span>
+  <span class="message-before">
+    <span><i class="bi-${iconName}"></i>${capitalCase(from)}</span>
+    ${latencySpan}
+  </span>
+  <span class="message-content">${message.text}</span>
   `;
 
   document.querySelector<HTMLDivElement>(".messages")!.appendChild(newMessage);
