@@ -4,10 +4,10 @@ import addNotification from "./utils/addNotification";
 import { createActor } from "../../declarations/ic_websocket_example_backend";
 
 // production
-const gatewayAddress = "wss://icws.io";
+const gatewayUrl = "wss://gateway.icws.io";
 const icUrl = "https://icp0.io";
 // local test
-// const gatewayAddress = "ws://127.0.0.1:8080";
+// const gatewayUrl = "ws://127.0.0.1:8080";
 // const icUrl = "http://127.0.0.1:4943";
 
 const backendCanisterId = process.env.CANISTER_ID_IC_WEBSOCKET_EXAMPLE_BACKEND || "";
@@ -41,7 +41,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 `;
 
-const ws = new IcWebSocket(gatewayAddress, undefined, {
+const ws = new IcWebSocket(gatewayUrl, undefined, {
   canisterId: backendCanisterId,
   canisterActor: ic_websocket_example_backend,
   networkUrl: icUrl,

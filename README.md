@@ -6,7 +6,7 @@ The example uses the IC WebSocket libraries:
 - [ic-websocket-js](https://github.com/omnia-network/ic-websocket-sdk-js) for the frontend
 - [ic-websocket-cdk](https://github.com/omnia-network/ic-websocket-cdk-rs) for the backend
 
-The frontend connects to an IC WebSocket Gateway hosted on AWS under the [icws.io](wss://icws.io) domain and maintained by the [Omnia Network](https://github.com/omnia-network) team. To know more about how the IC WebSocket Gateway works, please refer to the [IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket) repository.
+The frontend connects to an IC WebSocket Gateway hosted on AWS under the [gateway.icws.io](wss://gateway.icws.io) domain and maintained by the [Omnia Network](https://github.com/omnia-network) team. To know more about how the IC WebSocket Gateway works, please refer to the [IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket) repository.
 
 ## Demo
 
