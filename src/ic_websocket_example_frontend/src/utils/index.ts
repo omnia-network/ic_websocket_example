@@ -1,8 +1,8 @@
 import { capitalCase } from "change-case";
 
-// returns the message latency in ms
-export const getMessageLatency = (message: { text: string; timestamp: number; }) => {
-  return Date.now() - (message.timestamp / (10 ** 6));
+// returns the message latency in microseconds (us)
+const getMessageLatency = (message: { text: string; timestamp: number; }) => {
+  return Number((BigInt(Date.now()) * (10n ** 3n)) - (BigInt(message.timestamp) / (10n ** 3n)));
 }
 
 export const addMessageToUI = (message: { text: string; timestamp: number; }, from: 'backend' | 'frontend', messageId?: string) => {
@@ -28,10 +28,11 @@ export const addMessageToUI = (message: { text: string; timestamp: number; }, fr
   let latencySpan = '';
 
   if (from === 'backend') {
-    const latencyMs = getMessageLatency(message);
+    const latencyUs = getMessageLatency(message);
+    console.log("current timestamp (ms)", Date.now(), "canister-->client latency (us):", latencyUs);
 
     latencySpan = `
-    <span class="message-latency">(latency: ${Math.floor(latencyMs)}ms)</span>
+    <span class="message-latency">(latency: ${Math.floor(latencyUs/1_000)}ms)</span>
     `;
   }
 
