@@ -20,6 +20,7 @@ export default defineConfig({
     }),
     EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
+      LOG_LEVEL: 'debug',
     }),
   ],
   server: {
