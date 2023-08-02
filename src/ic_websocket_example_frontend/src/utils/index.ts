@@ -1,6 +1,11 @@
 import { capitalCase } from "change-case";
 
-export default function addMessageToUI(message: { text: string; timestamp: number; }, from: 'backend' | 'frontend', messageId?: string) {
+// returns the message latency in ms
+export const getMessageLatency = (message: { text: string; timestamp: number; }) => {
+  return Date.now() - (message.timestamp / (10 ** 6));
+}
+
+export const addMessageToUI = (message: { text: string; timestamp: number; }, from: 'backend' | 'frontend', messageId?: string) => {
   const isLoading = from === 'frontend' && message.text === ''
   if (isLoading) {
     message.text = 'Sending pong...';
@@ -23,7 +28,7 @@ export default function addMessageToUI(message: { text: string; timestamp: numbe
   let latencySpan = '';
 
   if (from === 'backend') {
-    const latencyMs = Date.now() - (message.timestamp / (10 ** 6));
+    const latencyMs = getMessageLatency(message);
 
     latencySpan = `
     <span class="message-latency">(latency: ${Math.floor(latencyMs)}ms)</span>

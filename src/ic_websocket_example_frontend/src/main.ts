@@ -1,7 +1,7 @@
 import "./styles.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import IcWebSocket from "ic-websocket-js";
-import addMessageToUI from "./utils/addNotification";
+import { addMessageToUI, getMessageLatency } from "./utils";
 import { createActor } from "../../declarations/ic_websocket_example_backend";
 
 // production
@@ -57,6 +57,8 @@ ws.onopen = () => {
 };
 
 ws.onmessage = (event: MessageEvent<{ text: string; timestamp: number; }>) => {
+  console.log("Received message:", event.data);
+  console.log("canister-->client latency (ms):", getMessageLatency(event.data));
   addMessageToUI(event.data, 'backend');
 
   messageCount += 1;
