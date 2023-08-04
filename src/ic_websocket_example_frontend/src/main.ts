@@ -21,25 +21,26 @@ const ic_websocket_example_backend = createActor(backendCanisterId, {
   }
 });
 
-let messageCount = 0;
+let messagesCount = 0;
+let isClosed = false;
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
     <h1>IC WebSocket demo</h1>
     <div class="sub-header">
       <a href="https://github.com/omnia-network/ic_websocket_example" target="_blank">Source code</a>
     </div>
     <p class="subtitle">Open the browser DevTools to see more logs.</p>
-    <div class="container">
+    <div class="ws-status-container">
       <div id="ws-status">
         <div id="ws-status-indicator" class="connecting"></div>
         <div id="ws-status-content">WebSocket is connecting...</div>
         <div id="ws-status-error"></div>
       </div>
+    </div>
+    <div class="messages-container">
       <div class="messages"></div>
       <div id="end-of-messages"></div>
     </div>
-  </div>
 `;
 
 const ws = new IcWebSocket(gatewayUrl, undefined, {
@@ -50,34 +51,67 @@ const ws = new IcWebSocket(gatewayUrl, undefined, {
   persistKey,
 });
 
+const displayErrorMessage = (error: string) => {
+  if (isClosed) {
+    return;
+  }
+
+  console.error(event);
+  document.getElementById("ws-status-indicator")!.classList.remove("connected");
+  document.getElementById("ws-status-indicator")!.classList.add("error");
+  document.getElementById("ws-status-content")!.textContent = "WebSocket error";
+  document.getElementById("ws-status-error")!.textContent = error;
+};
+
 ws.onopen = () => {
   document.getElementById("ws-status-indicator")!.classList.remove("connecting");
   document.getElementById("ws-status-indicator")!.classList.add("connected");
-  document.getElementById("ws-status-content")!.textContent = "WebSocket connected";
+  document.getElementById("ws-status-content")!.innerHTML = `
+    WebSocket opened
+    <button id="ws-status-button">Close</button>
+  `;
+
+  document.getElementById("ws-status-button")!.onclick = () => {
+    ws.close();
+    isClosed = true;
+  };
 };
 
 ws.onmessage = (event: MessageEvent<{ text: string; timestamp: number; }>) => {
+  if (isClosed) {
+    return;
+  }
+
   console.log("Received message:", event.data);
   addMessageToUI(event.data, 'backend');
 
-  messageCount += 1;
+  messagesCount += 1;
 
-  if (messageCount === 5) {
+  if (messagesCount === 50) {
     ws.close();
     return;
   }
 
   setTimeout(async () => {
-    console.log(messageCount);
-    const newText = event.data.text + "-pong";
-    event.data.text = newText;
-    addMessageToUI(event.data, 'frontend');
+    if (isClosed) {
+      return;
+    }
 
-    await ws.send({
-      text: newText,
-      timestamp: Date.now() * (10 ** 6),
-    });
+    const message = {
+      text: "pong",
+      timestamp: Date.now(),
+    };
+    addMessageToUI(message, 'frontend');
 
+    try {
+      await ws.send(message);
+    } catch (error) {
+      if (isClosed) {
+        return;
+      }
+
+      displayErrorMessage(JSON.stringify(error));
+    }
   }, 1000);
 };
 
@@ -86,18 +120,18 @@ ws.onclose = () => {
   document.getElementById("ws-status-indicator")!.classList.add("disconnected");
   document.getElementById("ws-status-content")!.innerHTML = `
     WebSocket closed
-    <button id="ws-status-restart-button">Restart</button>
+    <button id="ws-status-button" class="outline">Restart</button>
   `;
 
-  document.getElementById("ws-status-restart-button")!.onclick = () => {
+  document.getElementById("ws-status-button")!.onclick = () => {
     window.location.reload();
   };
 };
 
 ws.onerror = (event) => {
-  console.error(event);
-  document.getElementById("ws-status-indicator")!.classList.remove("connected");
-  document.getElementById("ws-status-indicator")!.classList.add("error");
-  document.getElementById("ws-status-content")!.textContent = "WebSocket error";
-  document.getElementById("ws-status-error")!.textContent = event.error.message;
-};
+  if (isClosed) {
+    return;
+  }
+
+  displayErrorMessage(event.error.message);
+}

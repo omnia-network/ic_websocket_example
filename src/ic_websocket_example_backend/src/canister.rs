@@ -24,7 +24,7 @@ pub fn on_open(args: OnOpenCallbackArgs) {
 pub fn on_message(args: OnMessageCallbackArgs) {
     let app_msg: AppMessage = from_slice(&args.message).unwrap();
     let new_msg = AppMessage {
-        text: app_msg.clone().text + " ping",
+        text: String::from("ping"),
         timestamp: time(),
     };
     print(format!("Received message: {:?}", app_msg));

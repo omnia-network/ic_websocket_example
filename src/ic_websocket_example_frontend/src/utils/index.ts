@@ -29,22 +29,21 @@ export const addMessageToUI = (message: { text: string; timestamp: number; }, fr
 
   if (from === 'backend') {
     const latencyUs = getMessageLatency(message);
+    const displayLatency = `(latency: ${Math.floor(latencyUs/1_000)}ms)`;
     console.log("current timestamp (ms)", Date.now(), "canister-->client latency (us):", latencyUs);
 
-    latencySpan = `
-    <span class="message-latency">(latency: ${Math.floor(latencyUs/1_000)}ms)</span>
-    `;
+    latencySpan = `<span class="message-latency">${displayLatency}</span>`;
   }
 
-  const iconName = from === 'backend' ? 'arrow-right' : 'arrow-left';
+  const iconName = from === 'backend' ? 'arrow-down' : 'arrow-up';
 
   newMessage.classList.value = `message from-${from} ${isLoading ? 'loading' : ''}`;
   newMessage.innerHTML = `
   <span class="message-before">
     <span><i class="bi-${iconName}"></i>${capitalCase(from)}</span>
-    ${latencySpan}
   </span>
   <span class="message-content">${message.text}</span>
+  ${latencySpan}
   `;
 
   document.querySelector<HTMLDivElement>(".messages")!.appendChild(newMessage);

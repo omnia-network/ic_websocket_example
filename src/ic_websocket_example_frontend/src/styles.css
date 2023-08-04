@@ -51,7 +51,7 @@ h1 {
   text-align: center;
 }
 
-.container {
+.messages-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -59,22 +59,37 @@ h1 {
   width: 100%;
   min-height: 50vh;
 
-  border-radius: 8px;
-  background-color: #464646;
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
   margin-inline: auto;
-  margin-top: 2rem;
   overflow: hidden;
+}
+
+.ws-status-container {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  background-color: #242424;
+  z-index: 10;
+  padding-top: 1rem;
 }
 
 #ws-status {
   width: 100%;
+  margin-inline: auto;
   display: flex;
   align-items: center;
   justify-content: flex-start;
   gap: 0.5rem;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   border-bottom: 1px solid #a0a0a0;
   padding-inline: 1rem;
-  padding-block: 1rem;;
+  padding-block: 1rem;
+}
+
+.messages-container,#ws-status {
+  background-color: #464646;
 }
 
 #ws-status-indicator {
@@ -96,12 +111,22 @@ h1 {
   background-color: #ff0000;
 }
 
+#ws-status-content {
+  flex-shrink: 0;
+}
+
 #ws-status-error {
   color: #ff0000;
 }
 
-#ws-status-restart-button {
+#ws-status-button {
   margin-left: 1rem;
+}
+
+.message-latency {
+  font-size: 0.75rem;
+  color: #acacac;
+  flex-shrink: 0;
 }
 
 .messages {
@@ -126,7 +151,7 @@ h1 {
   justify-content: flex-start;
   text-align: left;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
+  padding: 0.75rem 1rem;
 }
 .message i {
   width: 1em;
@@ -149,10 +174,6 @@ h1 {
   display: flex;
   flex-direction: column;
 }
-.message-latency {
-  font-size: 0.75rem;
-  color: #acacac;
-}
 
 button {
   border-radius: 8px;
@@ -171,6 +192,11 @@ button:hover {
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
+}
+button.outline {
+  background-color: transparent;
+  border-color: #646cff;
+  color: #646cff;
 }
 
 @media (prefers-color-scheme: light) {
@@ -191,16 +217,22 @@ button:focus-visible {
     padding: 2rem;
   }
 
-  .container {
-    width: 60%;
+  .messages-container {
+    width: 50%;
     min-height: 40vh;
   }
 
+  .ws-status-container {
+    padding-top: 2rem;
+  }
+
   #ws-status {
+    width: 50%;
     padding-inline: 1.5rem;
   }
 
   .message {
+    gap: 2rem;
     padding: 0.75rem 1.5rem;
   }
 
