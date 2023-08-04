@@ -8,6 +8,8 @@ The example uses the IC WebSocket libraries:
 
 The frontend connects to an IC WebSocket Gateway hosted on AWS under the [gateway.icws.io](wss://gateway.icws.io) domain and maintained by the [Omnia Network](https://github.com/omnia-network) team. To know more about how the IC WebSocket Gateway works, please refer to the [IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket-gateway) repository.
 
+If you want a step-by-step guide to implement WebSockets on the Internet Computer and build this example, see [WebSockets on the IC: Getting Started](https://medium.com/@ilbert/websockets-on-the-ic-getting-started-5f8bcdfaabdc).
+
 ## Demo
 
 A **live demo** is available at [demo.icws.io](https://demo.icws.io).
