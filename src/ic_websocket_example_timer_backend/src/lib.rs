@@ -1,13 +1,11 @@
 use ic_cdk_macros::*;
-use std::{cell::RefCell, time::Duration};
-use ic_cdk_timers::TimerId;
 
 use canister::{on_close, on_message, on_open};
 use ic_websocket_cdk::{
     CanisterWsCloseArguments, CanisterWsCloseResult, CanisterWsGetMessagesArguments,
     CanisterWsGetMessagesResult, CanisterWsMessageArguments, CanisterWsMessageResult,
     CanisterWsOpenArguments, CanisterWsOpenResult, CanisterWsRegisterArguments,
-    CanisterWsRegisterResult, WsHandlers,
+    CanisterWsRegisterResult, WsHandlers
 };
 
 mod canister;
@@ -17,11 +15,6 @@ mod canister;
 //     "3656s-3kqlj-dkm5d-oputg-ymybu-4gnuq-7aojd-w2fzw-5lfp2-4zhx3-4ae";
 pub const GATEWAY_PRINCIPAL: &str =
     "sqdfl-mr4km-2hfjy-gajqo-xqvh7-hf4mf-nra4i-3it6l-neaw4-soolw-tae";
-    
-thread_local! {
-    /* flexible */ static TIMER_ID: RefCell<TimerId> = RefCell::default();
-    /* flexible */ static IS_TIMER_RUNNING: RefCell<bool> = RefCell::new(false);
-}
 
 #[init]
 fn init() {
@@ -73,30 +66,4 @@ fn ws_message(args: CanisterWsMessageArguments) -> CanisterWsMessageResult {
 #[query]
 fn ws_get_messages(args: CanisterWsGetMessagesArguments) -> CanisterWsGetMessagesResult {
     ic_websocket_cdk::ws_get_messages(args)
-}
-
-#[update]
-fn start_timer(interval_ms: u64) {
-    TIMER_ID.with(|timer_id| {
-        let mut timer_id = timer_id.borrow_mut();
-        *timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(interval_ms), || {
-            ic_cdk::print("Hello from timer!");
-        });
-    });
-    IS_TIMER_RUNNING.with(|is_timer_running| *is_timer_running.borrow_mut() = true);
-}
-
-#[update]
-fn stop_timer() {
-    TIMER_ID.with(|timer_id| {
-        let mut timer_id = timer_id.borrow_mut();
-        ic_cdk_timers::clear_timer(*timer_id);
-        *timer_id = TimerId::default();
-    });
-    IS_TIMER_RUNNING.with(|is_timer_running| *is_timer_running.borrow_mut() = false);
-}
-
-#[query]
-fn is_timer_running() -> bool {
-    IS_TIMER_RUNNING.with(|is_timer_running| *is_timer_running.borrow())
 }

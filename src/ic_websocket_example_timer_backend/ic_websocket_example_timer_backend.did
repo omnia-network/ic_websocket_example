@@ -89,5 +89,5 @@ service : {
 
   "start_timer" : (nat64) -> ();
   "stop_timer" : () -> ();
-  "is_timer_running" : () -> (bool);
+  "is_timer_running" : () -> (bool) query;
 };
