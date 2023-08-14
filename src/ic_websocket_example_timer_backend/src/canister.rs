@@ -44,6 +44,11 @@ pub fn on_close(args: OnCloseCallbackArgs) {
 fn start_timer(interval_ms: u64) {
     TIMER_ID.with(|timer_id| {
         let mut timer_id = timer_id.borrow_mut();
+        assert!(
+            !IS_TIMER_RUNNING.with(|is_timer_running| *is_timer_running.borrow()),
+            "Timer already running"
+        );
+        assert!(interval_ms >= 10, "Interval must be greater than 10 ms");
         *timer_id = ic_cdk_timers::set_timer_interval(Duration::from_millis(interval_ms), || {
             print(format!("Timer fired at {}", time()));
             let msg = AppMessage {
@@ -58,15 +63,17 @@ fn start_timer(interval_ms: u64) {
                 }
             });
         });
+        print(format!("Timer started with id {:?}", *timer_id));
     });
     IS_TIMER_RUNNING.with(|is_timer_running| *is_timer_running.borrow_mut() = true);
-    print("Timer started");
+    print(format!("Timer started with interval {} ms", interval_ms));
 }
 
 #[update]
 fn stop_timer() {
     TIMER_ID.with(|timer_id| {
         let mut timer_id = timer_id.borrow_mut();
+        print(format!("Stopping timer with id {:?}", *timer_id));
         ic_cdk_timers::clear_timer(*timer_id);
         *timer_id = TimerId::default();
     });

@@ -4,6 +4,23 @@
       "candid": "src/ic_websocket_example_timer_backend/ic_websocket_example_timer_backend.did",
       "package": "ic_websocket_example_timer_backend",
       "type": "rust"
+    },
+    "ic_websocket_example_frontend": {
+      "dependencies": [
+        "ic_websocket_example_timer_backend"
+      ],
+      "frontend": {
+        "entrypoint": "src/ic_websocket_example_frontend/dist/index.html"
+      },
+      "source": [
+        "src/ic_websocket_example_frontend/dist"
+      ],
+      "type": "assets",
+      "remote": {
+        "id": {
+          "ic": "aaaaa-aa"
+        }
+      }
     }
   },
   "defaults": {

@@ -29,13 +29,7 @@ fn init() {
 
 #[post_upgrade]
 fn post_upgrade() {
-    let handlers = WsHandlers {
-        on_open: Some(on_open),
-        on_message: Some(on_message),
-        on_close: Some(on_close),
-    };
-
-    ic_websocket_cdk::init(handlers, GATEWAY_PRINCIPAL);
+    init();
 }
 
 // method called by the client SDK when instantiating a new IcWebSocket
