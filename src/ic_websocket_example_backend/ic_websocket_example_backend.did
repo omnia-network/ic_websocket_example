@@ -86,4 +86,8 @@ service : {
   "ws_close" : (CanisterWsCloseArguments) -> (CanisterWsCloseResult);
   "ws_message" : (CanisterWsMessageArguments) -> (CanisterWsMessageResult);
   "ws_get_messages" : (CanisterWsGetMessagesArguments) -> (CanisterWsGetMessagesResult) query;
+
+  "start_timer" : (nat64) -> ();
+  "stop_timer" : () -> ();
+  "is_timer_running" : () -> (bool);
 };

@@ -9,10 +9,6 @@
     "Canister"
   ],
   "scripts": {
-    "build": "cd src/ic_websocket_example_frontend && npm run build",
-    "prebuild": "npm run generate",
-    "start": "cd src/ic_websocket_example_frontend && npm run dev",
-    "prestart": "npm run generate",
     "deploy:local": "dfx deploy --network=local",
     "deploy:ic": "dfx deploy --network=ic",
     "generate": "dfx generate ic_websocket_example_backend"

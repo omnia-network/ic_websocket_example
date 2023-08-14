@@ -4,18 +4,6 @@
       "candid": "src/ic_websocket_example_backend/ic_websocket_example_backend.did",
       "package": "ic_websocket_example_backend",
       "type": "rust"
-    },
-    "ic_websocket_example_frontend": {
-      "dependencies": [
-        "ic_websocket_example_backend"
-      ],
-      "frontend": {
-        "entrypoint": "src/ic_websocket_example_frontend/dist/index.html"
-      },
-      "source": [
-        "src/ic_websocket_example_frontend/dist"
-      ],
-      "type": "assets"
     }
   },
   "defaults": {
