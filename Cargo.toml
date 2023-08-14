@@ -1,4 +1,4 @@
 [workspace]
 members = [
-    "src/ic_websocket_example_backend",
+    "src/ic_websocket_example_timer_backend",
 ]

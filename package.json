@@ -11,7 +11,7 @@
   "scripts": {
     "deploy:local": "dfx deploy --network=local",
     "deploy:ic": "dfx deploy --network=ic",
-    "generate": "dfx generate ic_websocket_example_backend"
+    "generate": "dfx generate ic_websocket_example_timer_backend"
   },
   "dependencies": {
     "@dfinity/agent": "^0.18.1",

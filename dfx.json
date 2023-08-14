@@ -1,8 +1,8 @@
 {
   "canisters": {
-    "ic_websocket_example_backend": {
-      "candid": "src/ic_websocket_example_backend/ic_websocket_example_backend.did",
-      "package": "ic_websocket_example_backend",
+    "ic_websocket_example_timer_backend": {
+      "candid": "src/ic_websocket_example_timer_backend/ic_websocket_example_timer_backend.did",
+      "package": "ic_websocket_example_timer_backend",
       "type": "rust"
     }
   },
