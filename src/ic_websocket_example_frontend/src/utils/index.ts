@@ -1,11 +1,12 @@
 import { capitalCase } from "change-case";
+import type { AppMessage } from "../../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // returns the message latency in microseconds (us)
-const getMessageLatency = (message: { text: string; timestamp: number; }) => {
+const getMessageLatency = (message: AppMessage) => {
   return Number((BigInt(Date.now()) * (10n ** 3n)) - (BigInt(message.timestamp) / (10n ** 3n)));
 }
 
-export const addMessageToUI = (message: { text: string; timestamp: number; }, from: 'backend' | 'frontend', messageId?: string) => {
+export const addMessageToUI = (message: AppMessage, from: 'backend' | 'frontend', messageId?: string) => {
   const isLoading = from === 'frontend' && message.text === ''
   if (isLoading) {
     message.text = 'Sending pong...';

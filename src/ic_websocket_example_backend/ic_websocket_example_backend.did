@@ -1,3 +1,10 @@
+// Application-specific types
+type AppMessage = record {
+  text : text;
+  timestamp : nat64;
+};
+
+// IC WebSocket types
 type ClientPublicKey = blob;
 
 type DirectClientMessage = record {
@@ -23,8 +30,8 @@ type CanisterIncomingMessage = variant {
 
 type CanisterOutputMessage = record {
   client_key : ClientPublicKey;
+  content : blob;
   key : text;
-  val : blob;
 };
 
 type CanisterOutputCertifiedMessages = record {
@@ -43,7 +50,7 @@ type CanisterWsRegisterResult = variant {
 };
 
 type CanisterWsOpenArguments = record {
-  msg : blob;
+  content : blob;
   sig : blob;
 };
 

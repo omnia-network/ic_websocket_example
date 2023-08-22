@@ -1,8 +1,11 @@
 import "./styles.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
+
 import IcWebSocket from "ic-websocket-js";
 import { addMessageToUI } from "./utils";
+import { deserializeAppMessage, serializeAppMessage } from "./utils/idl";
 import { createActor } from "../../declarations/ic_websocket_example_backend";
+import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
 const gatewayUrl = "wss://gateway.icws.io";
@@ -77,13 +80,15 @@ ws.onopen = () => {
   };
 };
 
-ws.onmessage = (event: MessageEvent<{ text: string; timestamp: number; }>) => {
+ws.onmessage = (event) => {
   if (isClosed) {
     return;
   }
 
-  console.log("Received message:", event.data);
-  addMessageToUI(event.data, 'backend');
+  const message = deserializeAppMessage(event.data);
+
+  console.log("Received message:", message);
+  addMessageToUI(message, 'backend');
 
   messagesCount += 1;
 
@@ -97,14 +102,15 @@ ws.onmessage = (event: MessageEvent<{ text: string; timestamp: number; }>) => {
       return;
     }
 
-    const message = {
+    const message: AppMessage = {
       text: "pong",
-      timestamp: Date.now(),
+      timestamp: BigInt(Date.now()),
     };
     addMessageToUI(message, 'frontend');
 
     try {
-      await ws.send(message);
+      const messageToSend = serializeAppMessage(message);
+      await ws.send(messageToSend);
     } catch (error) {
       if (isClosed) {
         return;
