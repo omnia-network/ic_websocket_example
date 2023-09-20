@@ -106,7 +106,7 @@ ws.onmessage = (event) => {
 
     try {
       const messageToSend = serializeAppMessage(message);
-      await ws.send(messageToSend);
+      ws.send(messageToSend);
     } catch (error) {
       if (isClosed) {
         return;
