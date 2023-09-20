@@ -3,7 +3,7 @@ use ic_cdk::{print, api::time};
 use serde::{Deserialize, Serialize};
 
 use ic_websocket_cdk::{
-    ws_send, ClientPublicKey, OnCloseCallbackArgs, OnMessageCallbackArgs, OnOpenCallbackArgs,
+    ws_send, ClientPrincipal, OnCloseCallbackArgs, OnMessageCallbackArgs, OnOpenCallbackArgs,
 };
 
 #[derive(CandidType, Clone, Debug, Deserialize, Serialize, Eq, PartialEq)]
@@ -23,7 +23,7 @@ pub fn on_open(args: OnOpenCallbackArgs) {
         text: String::from("ping"),
         timestamp: time(),
     };
-    send_app_message(args.client_key, msg);
+    send_app_message(args.client_principal, msg);
 }
 
 pub fn on_message(args: OnMessageCallbackArgs) {
@@ -33,16 +33,16 @@ pub fn on_message(args: OnMessageCallbackArgs) {
         timestamp: time(),
     };
     print(format!("Received message: {:?}", app_msg));
-    send_app_message(args.client_key, new_msg)
+    send_app_message(args.client_principal, new_msg)
 }
 
-fn send_app_message(client_key: ClientPublicKey, msg: AppMessage) {
+fn send_app_message(client_principal: ClientPrincipal, msg: AppMessage) {
     print(format!("Sending message: {:?}", msg));
-    if let Err(e) = ws_send(client_key, msg.candid_serialize()) {
+    if let Err(e) = ws_send(client_principal, msg.candid_serialize()) {
         println!("Could not send message: {}", e);
     }
 }
 
 pub fn on_close(args: OnCloseCallbackArgs) {
-    print(format!("Client {:?} disconnected", args.client_key));
+    print(format!("Client {} disconnected", args.client_principal));
 }
