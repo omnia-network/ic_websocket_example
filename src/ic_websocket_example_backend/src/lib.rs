@@ -4,15 +4,14 @@ use canister::{on_close, on_message, on_open};
 use ic_websocket_cdk::{
     CanisterWsCloseArguments, CanisterWsCloseResult, CanisterWsGetMessagesArguments,
     CanisterWsGetMessagesResult, CanisterWsMessageArguments, CanisterWsMessageResult,
-    CanisterWsOpenArguments, CanisterWsOpenResult, CanisterWsRegisterArguments,
-    CanisterWsRegisterResult, WsHandlers,
+    CanisterWsOpenArguments, CanisterWsOpenResult, WsHandlers, WsInitParams,
 };
 
 mod canister;
 
-/// This is the principal of the WS Gateway deployed on wss://icws.io
+/// This is the principal of the WS Gateway deployed on wss://gateway.icws.io
 pub const GATEWAY_PRINCIPAL: &str =
-    "3656s-3kqlj-dkm5d-oputg-ymybu-4gnuq-7aojd-w2fzw-5lfp2-4zhx3-4ae";
+    "lg3nb-si435-jnrox-6qdrd-i6tuh-73huj-vg32b-l3cqf-kpyf4-7c6zg-nae";
 
 /// The principal of the WS Gateway deployed locally
 // pub const GATEWAY_PRINCIPAL: &str =
@@ -26,39 +25,29 @@ fn init() {
         on_close: Some(on_close),
     };
 
-    ic_websocket_cdk::init(handlers, GATEWAY_PRINCIPAL);
+    let params = WsInitParams::new(handlers, String::from(GATEWAY_PRINCIPAL));
+
+    ic_websocket_cdk::init(params);
 }
 
 #[post_upgrade]
 fn post_upgrade() {
-    let handlers = WsHandlers {
-        on_open: Some(on_open),
-        on_message: Some(on_message),
-        on_close: Some(on_close),
-    };
-
-    ic_websocket_cdk::init(handlers, GATEWAY_PRINCIPAL);
+    init();
 }
 
-// method called by the client SDK when instantiating a new IcWebSocket
-#[update]
-fn ws_register(args: CanisterWsRegisterArguments) -> CanisterWsRegisterResult {
-    ic_websocket_cdk::ws_register(args)
-}
-
-// method called by the WS Gateway after receiving FirstMessage from the client
+// method called by the client to open a WS connection to the canister (relayed by the WS Gateway)
 #[update]
 fn ws_open(args: CanisterWsOpenArguments) -> CanisterWsOpenResult {
     ic_websocket_cdk::ws_open(args)
 }
 
-// method called by the Ws Gateway when closing the IcWebSocket connection
+// method called by the Ws Gateway when closing the IcWebSocket connection for a client
 #[update]
 fn ws_close(args: CanisterWsCloseArguments) -> CanisterWsCloseResult {
     ic_websocket_cdk::ws_close(args)
 }
 
-// method called by the WS Gateway to send a message of type GatewayMessage to the canister
+// method called by the client to send a message to the canister (relayed by the WS Gateway)
 #[update]
 fn ws_message(args: CanisterWsMessageArguments) -> CanisterWsMessageResult {
     ic_websocket_cdk::ws_message(args)
