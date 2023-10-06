@@ -11,7 +11,7 @@ mod canister;
 
 /// This is the principal of the WS Gateway deployed on wss://gateway.icws.io
 pub const GATEWAY_PRINCIPAL: &str =
-    "lg3nb-si435-jnrox-6qdrd-i6tuh-73huj-vg32b-l3cqf-kpyf4-7c6zg-nae";
+    "3656s-3kqlj-dkm5d-oputg-ymybu-4gnuq-7aojd-w2fzw-5lfp2-4zhx3-4ae";
 
 /// The principal of the WS Gateway deployed locally
 // pub const GATEWAY_PRINCIPAL: &str =
