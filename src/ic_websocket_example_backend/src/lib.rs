@@ -35,19 +35,19 @@ fn post_upgrade() {
     init();
 }
 
-// method called by the WS Gateway after receiving FirstMessage from the client
+// method called by the client to open a WS connection to the canister (relayed by the WS Gateway)
 #[update]
 fn ws_open(args: CanisterWsOpenArguments) -> CanisterWsOpenResult {
     ic_websocket_cdk::ws_open(args)
 }
 
-// method called by the Ws Gateway when closing the IcWebSocket connection
+// method called by the Ws Gateway when closing the IcWebSocket connection for a client
 #[update]
 fn ws_close(args: CanisterWsCloseArguments) -> CanisterWsCloseResult {
     ic_websocket_cdk::ws_close(args)
 }
 
-// method called by the WS Gateway to send a message of type GatewayMessage to the canister
+// method called by the client to send a message to the canister (relayed by the WS Gateway)
 #[update]
 fn ws_message(args: CanisterWsMessageArguments) -> CanisterWsMessageResult {
     ic_websocket_cdk::ws_message(args)
