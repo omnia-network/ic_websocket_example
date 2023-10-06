@@ -56,6 +56,8 @@ const displayErrorMessage = (error: string) => {
 };
 
 ws.onopen = () => {
+  console.log("WebSocket state:", ws.readyState, "is open:", ws.readyState === ws.OPEN);
+
   document.getElementById("ws-status-indicator")!.classList.remove("connecting");
   document.getElementById("ws-status-indicator")!.classList.add("connected");
   document.getElementById("ws-status-content")!.innerHTML = `
