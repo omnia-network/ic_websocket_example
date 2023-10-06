@@ -4,23 +4,16 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import IcWebSocket, { generateRandomIdentity } from "ic-websocket-js";
 import { addMessageToUI } from "./utils";
 import { deserializeAppMessage, serializeAppMessage } from "./utils/idl";
-// import { createActor } from "../../declarations/ic_websocket_example_backend";
 import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
-const gatewayUrl = "wss://gatewayv1.icws.io";
+const gatewayUrl = "wss://gateway.icws.io";
 const icUrl = "https://icp0.io";
 // local test
 // const gatewayUrl = "ws://127.0.0.1:8080";
 // const icUrl = "http://127.0.0.1:4943";
 
 const backendCanisterId = process.env.CANISTER_ID_IC_WEBSOCKET_EXAMPLE_BACKEND || "";
-
-// const ic_websocket_example_backend = createActor(backendCanisterId, {
-//   agentOptions: {
-//     host: icUrl,
-//   }
-// });
 
 let messagesCount = 0;
 let isClosed = false;
