@@ -85,6 +85,7 @@ ws.onmessage = (event) => {
 
   if (messagesCount === 50) {
     ws.close();
+    console.log("Closing WebSocket after 50 ping-pongs. Reload the page to restart.");
     return;
   }
 
