@@ -12,5 +12,5 @@ crate-type = ["cdylib"]
 candid = "0.9.3"
 ic-cdk = "0.10.0"
 ic-cdk-macros = "0.7.1"
-ic-websocket-cdk = "0.1.2"
+ic-websocket-cdk = "0.1.3"
 serde = "1.0.176"
