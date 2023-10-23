@@ -1,10 +1,10 @@
 import "./styles.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import IcWebSocket, { generateRandomIdentity } from "ic-websocket-js";
+import IcWebSocket, { generateRandomIdentity, createWsConfig } from "ic-websocket-js";
 import { addMessageToUI } from "./utils";
-import { deserializeAppMessage, serializeAppMessage } from "./utils/idl";
-import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
+import { ic_websocket_example_backend } from "../../declarations/ic_websocket_example_backend";
+import type { AppMessage, _SERVICE } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
 const gatewayUrl = "wss://gateway.icws.io";
@@ -37,11 +37,14 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `;
 
-const ws = new IcWebSocket(gatewayUrl, undefined, {
+const initParams = createWsConfig({
   canisterId: backendCanisterId,
+  canisterActor: ic_websocket_example_backend,
   identity: generateRandomIdentity(),
   networkUrl: icUrl,
 });
+
+const ws = new IcWebSocket(gatewayUrl, undefined, initParams);
 
 const displayErrorMessage = (error: string) => {
   if (isClosed) {
@@ -76,7 +79,7 @@ ws.onmessage = (event) => {
     return;
   }
 
-  const message = deserializeAppMessage(event.data);
+  const message = event.data;
 
   console.log("Received message:", message);
   addMessageToUI(message, 'backend');
@@ -94,14 +97,13 @@ ws.onmessage = (event) => {
       return;
     }
 
-    const message: AppMessage = {
+    const messageToSend: AppMessage = {
       text: "pong",
       timestamp: BigInt(Date.now()),
     };
     addMessageToUI(message, 'frontend');
 
     try {
-      const messageToSend = serializeAppMessage(message);
       ws.send(messageToSend);
     } catch (error) {
       if (isClosed) {

@@ -1,6 +1,6 @@
 use ic_cdk_macros::*;
 
-use canister::{on_close, on_message, on_open};
+use canister::{on_close, on_message, on_open, AppMessage};
 use ic_websocket_cdk::{
     CanisterWsCloseArguments, CanisterWsCloseResult, CanisterWsGetMessagesArguments,
     CanisterWsGetMessagesResult, CanisterWsMessageArguments, CanisterWsMessageResult,
@@ -49,8 +49,8 @@ fn ws_close(args: CanisterWsCloseArguments) -> CanisterWsCloseResult {
 
 // method called by the client to send a message to the canister (relayed by the WS Gateway)
 #[update]
-fn ws_message(args: CanisterWsMessageArguments) -> CanisterWsMessageResult {
-    ic_websocket_cdk::ws_message(args)
+fn ws_message(args: CanisterWsMessageArguments, msg_type: Option<AppMessage>) -> CanisterWsMessageResult {
+    ic_websocket_cdk::ws_message(args, msg_type)
 }
 
 // method called by the WS Gateway to get messages for all the clients it serves

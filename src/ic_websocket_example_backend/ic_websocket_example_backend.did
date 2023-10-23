@@ -70,6 +70,6 @@ type CanisterWsGetMessagesResult = variant {
 service : {
   "ws_open" : (CanisterWsOpenArguments) -> (CanisterWsOpenResult);
   "ws_close" : (CanisterWsCloseArguments) -> (CanisterWsCloseResult);
-  "ws_message" : (CanisterWsMessageArguments) -> (CanisterWsMessageResult);
+  "ws_message" : (CanisterWsMessageArguments, opt AppMessage) -> (CanisterWsMessageResult);
   "ws_get_messages" : (CanisterWsGetMessagesArguments) -> (CanisterWsGetMessagesResult) query;
 };

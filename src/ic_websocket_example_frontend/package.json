@@ -17,7 +17,6 @@
   "dependencies": {
     "bootstrap-icons": "^1.10.5",
     "change-case": "^4.1.2",
-    "ic-websocket-js": "^0.1.2",
-    "tweetnacl": "^1.0.3"
+    "ic-websocket-js": "github:omnia-network/ic-websocket-sdk-js#aded40df5de9f54cddd6e2e3ed57bdc7a0a116db"
   }
 }
