@@ -51,7 +51,7 @@ const displayErrorMessage = (error: string) => {
     return;
   }
 
-  console.error(event);
+  console.error(error);
   document.getElementById("ws-status-indicator")!.classList.remove("connected");
   document.getElementById("ws-status-indicator")!.classList.add("error");
   document.getElementById("ws-status-content")!.textContent = "WebSocket error";
