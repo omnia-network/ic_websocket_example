@@ -37,14 +37,13 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `;
 
-const initParams = createWsConfig({
+const wsConfig = createWsConfig({
   canisterId: backendCanisterId,
   canisterActor: ic_websocket_example_backend,
   identity: generateRandomIdentity(),
   networkUrl: icUrl,
 });
-
-const ws = new IcWebSocket(gatewayUrl, undefined, initParams);
+const ws = new IcWebSocket(gatewayUrl, undefined, wsConfig);
 
 const displayErrorMessage = (error: string) => {
   if (isClosed) {
