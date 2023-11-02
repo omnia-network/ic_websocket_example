@@ -1,9 +1,9 @@
 import "./styles.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
-import IcWebSocket, { generateRandomIdentity } from "ic-websocket-js";
+import IcWebSocket, { generateRandomIdentity, createWsConfig } from "ic-websocket-js";
 import { addMessageToUI } from "./utils";
-import { deserializeAppMessage, serializeAppMessage } from "./utils/idl";
+import { ic_websocket_example_backend } from "../../declarations/ic_websocket_example_backend";
 import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
@@ -37,18 +37,20 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `;
 
-const ws = new IcWebSocket(gatewayUrl, undefined, {
+const wsConfig = createWsConfig({
   canisterId: backendCanisterId,
+  canisterActor: ic_websocket_example_backend,
   identity: generateRandomIdentity(),
   networkUrl: icUrl,
 });
+const ws = new IcWebSocket(gatewayUrl, undefined, wsConfig);
 
 const displayErrorMessage = (error: string) => {
   if (isClosed) {
     return;
   }
 
-  console.error(event);
+  console.error(error);
   document.getElementById("ws-status-indicator")!.classList.remove("connected");
   document.getElementById("ws-status-indicator")!.classList.add("error");
   document.getElementById("ws-status-content")!.textContent = "WebSocket error";
@@ -76,7 +78,7 @@ ws.onmessage = (event) => {
     return;
   }
 
-  const message = deserializeAppMessage(event.data);
+  const message = event.data;
 
   console.log("Received message:", message);
   addMessageToUI(message, 'backend');
@@ -94,14 +96,13 @@ ws.onmessage = (event) => {
       return;
     }
 
-    const message: AppMessage = {
+    const messageToSend: AppMessage = {
       text: "pong",
       timestamp: BigInt(Date.now()),
     };
     addMessageToUI(message, 'frontend');
 
     try {
-      const messageToSend = serializeAppMessage(message);
       ws.send(messageToSend);
     } catch (error) {
       if (isClosed) {

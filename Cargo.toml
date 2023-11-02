@@ -2,3 +2,4 @@
 members = [
     "src/ic_websocket_example_backend",
 ]
+resolver = "2"
