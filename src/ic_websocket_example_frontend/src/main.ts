@@ -4,7 +4,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 import IcWebSocket, { generateRandomIdentity, createWsConfig } from "ic-websocket-js";
 import { addMessageToUI } from "./utils";
 import { ic_websocket_example_backend } from "../../declarations/ic_websocket_example_backend";
-import type { AppMessage, _SERVICE } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
+import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
 const gatewayUrl = "wss://gateway.icws.io";
