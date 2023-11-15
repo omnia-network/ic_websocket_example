@@ -100,7 +100,7 @@ ws.onmessage = (event) => {
       text: "pong",
       timestamp: BigInt(Date.now()),
     };
-    addMessageToUI(message, 'frontend');
+    addMessageToUI(messageToSend, 'frontend');
 
     try {
       ws.send(messageToSend);
