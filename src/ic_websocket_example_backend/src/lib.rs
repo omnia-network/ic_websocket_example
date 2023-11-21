@@ -10,11 +10,11 @@ use ic_websocket_cdk::{
 mod canister;
 
 /// This is the principal of the WS Gateway deployed on wss://gateway.icws.io
-pub const GATEWAY_PRINCIPAL: &str =
+const GATEWAY_PRINCIPAL: &str =
     "3656s-3kqlj-dkm5d-oputg-ymybu-4gnuq-7aojd-w2fzw-5lfp2-4zhx3-4ae";
 
 /// The principal of the WS Gateway deployed locally
-// pub const GATEWAY_PRINCIPAL: &str =
+// const GATEWAY_PRINCIPAL: &str =
 //     "sqdfl-mr4km-2hfjy-gajqo-xqvh7-hf4mf-nra4i-3it6l-neaw4-soolw-tae";
 
 #[init]
@@ -25,7 +25,11 @@ fn init() {
         on_close: Some(on_close),
     };
 
-    let params = WsInitParams::new(handlers, String::from(GATEWAY_PRINCIPAL));
+    let gateway_principals: Vec<String> = vec![
+        String::from(GATEWAY_PRINCIPAL),
+    ];
+
+    let params = WsInitParams::new(handlers, gateway_principals);
 
     ic_websocket_cdk::init(params);
 }
