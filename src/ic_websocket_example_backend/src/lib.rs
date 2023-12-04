@@ -9,14 +9,6 @@ use ic_websocket_cdk::{
 
 mod canister;
 
-/// This is the principal of the WS Gateway deployed on wss://gateway.icws.io
-const GATEWAY_PRINCIPAL: &str =
-    "3656s-3kqlj-dkm5d-oputg-ymybu-4gnuq-7aojd-w2fzw-5lfp2-4zhx3-4ae";
-
-/// The principal of the WS Gateway deployed locally
-// const GATEWAY_PRINCIPAL: &str =
-//     "sqdfl-mr4km-2hfjy-gajqo-xqvh7-hf4mf-nra4i-3it6l-neaw4-soolw-tae";
-
 #[init]
 fn init() {
     let handlers = WsHandlers {
@@ -25,11 +17,7 @@ fn init() {
         on_close: Some(on_close),
     };
 
-    let gateway_principals: Vec<String> = vec![
-        String::from(GATEWAY_PRINCIPAL),
-    ];
-
-    let params = WsInitParams::new(handlers, gateway_principals);
+    let params = WsInitParams::new(handlers);
 
     ic_websocket_cdk::init(params);
 }
@@ -53,7 +41,10 @@ fn ws_close(args: CanisterWsCloseArguments) -> CanisterWsCloseResult {
 
 // method called by the client to send a message to the canister (relayed by the WS Gateway)
 #[update]
-fn ws_message(args: CanisterWsMessageArguments, msg_type: Option<AppMessage>) -> CanisterWsMessageResult {
+fn ws_message(
+    args: CanisterWsMessageArguments,
+    msg_type: Option<AppMessage>,
+) -> CanisterWsMessageResult {
     ic_websocket_cdk::ws_message(args, msg_type)
 }
 
