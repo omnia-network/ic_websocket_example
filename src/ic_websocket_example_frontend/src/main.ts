@@ -7,7 +7,10 @@ import { ic_websocket_example_backend } from "../../declarations/ic_websocket_ex
 import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
-const gatewayUrl = "wss://gateway.icws.io";
+// gateway hosted by Omnia Team on AWS
+// const gatewayUrl = "wss://gateway.icws.io";
+// gateway hosted by Omnia Team on Flux
+const gatewayUrl = "wss://icwebsocketgateway.app.runonflux.io";
 const icUrl = "https://icp0.io";
 // local test
 // const gatewayUrl = "ws://127.0.0.1:8080";
