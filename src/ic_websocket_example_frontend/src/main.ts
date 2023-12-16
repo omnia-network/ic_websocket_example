@@ -7,14 +7,20 @@ import { ic_websocket_example_backend } from "../../declarations/ic_websocket_ex
 import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
 // production
-// gateway hosted by Omnia Team on AWS
-// const gatewayUrl = "wss://gateway.icws.io";
-// gateway hosted by Omnia Team on Flux
-const gatewayUrl = "wss://icwebsocketgateway.app.runonflux.io";
+const availableGateways = [
+  // gateway hosted by Omnia Team on Flux
+  "wss://icwebsocketgateway.app.runonflux.io",
+  // gateway hosted by Omnia Team on AWS
+  "wss://gateway.icws.io",
+];
 const icUrl = "https://icp0.io";
 // local test
-// const gatewayUrl = "ws://127.0.0.1:8080";
+// const availableGateways = [
+//   "ws://127.0.0.1:8080",
+// ];
 // const icUrl = "http://127.0.0.1:4943";
+
+const selectedGateway = new URL(window.location.href).searchParams.get("gw") || availableGateways[0];
 
 const backendCanisterId = process.env.CANISTER_ID_IC_WEBSOCKET_EXAMPLE_BACKEND || "";
 
@@ -27,6 +33,15 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
       <a href="https://github.com/omnia-network/ic_websocket_example" target="_blank">Source code</a>
     </div>
     <p class="subtitle">Open the browser DevTools to see more logs.</p>
+    <div class="gateway-selector-container">
+      <label for="gateway-selector">Gateway:</label>
+      <select id="gateway-selector">
+        ${availableGateways
+    .map((gateway) => `<option value="${gateway}" ${gateway === selectedGateway ? 'selected' : ''}>${gateway}</option>`)
+    .join("")
+  }
+      </select>
+    </div>
     <div class="ws-status-container">
       <div id="ws-status">
         <div id="ws-status-indicator" class="connecting"></div>
@@ -40,14 +55,6 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     </div>
 `;
 
-const wsConfig = createWsConfig({
-  canisterId: backendCanisterId,
-  canisterActor: ic_websocket_example_backend,
-  identity: generateRandomIdentity(),
-  networkUrl: icUrl,
-});
-const ws = new IcWebSocket(gatewayUrl, undefined, wsConfig);
-
 const displayErrorMessage = (error: string) => {
   if (isClosed) {
     return;
@@ -59,6 +66,14 @@ const displayErrorMessage = (error: string) => {
   document.getElementById("ws-status-content")!.textContent = "WebSocket error";
   document.getElementById("ws-status-error")!.textContent = error;
 };
+
+const wsConfig = createWsConfig({
+  canisterId: backendCanisterId,
+  canisterActor: ic_websocket_example_backend,
+  identity: generateRandomIdentity(),
+  networkUrl: icUrl,
+});
+const ws = new IcWebSocket(selectedGateway, undefined, wsConfig);
 
 ws.onopen = () => {
   console.log("WebSocket state:", ws.readyState, "is open:", ws.readyState === ws.OPEN);
@@ -136,4 +151,17 @@ ws.onerror = (event) => {
   }
 
   displayErrorMessage(event.error.message);
-}
+};
+
+document.getElementById("gateway-selector")!.onchange = () => {
+  const newGw = (document.getElementById("gateway-selector")! as HTMLSelectElement).value;
+
+  if (newGw === selectedGateway) {
+    return;
+  }
+
+  const newUrl = new URL(window.location.href);
+  newUrl.searchParams.set("gw", newGw);
+
+  window.location.href = newUrl.toString();
+};

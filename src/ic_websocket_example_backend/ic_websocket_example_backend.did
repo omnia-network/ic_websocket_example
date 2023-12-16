@@ -6,6 +6,7 @@ type AppMessage = record {
 
 // IC WebSocket types
 type ClientPrincipal = principal;
+type GatewayPrincipal = principal;
 type ClientKey = record {
   client_principal : ClientPrincipal;
   client_nonce : nat64;
@@ -29,10 +30,12 @@ type CanisterOutputCertifiedMessages = record {
   messages : vec CanisterOutputMessage;
   cert : blob;
   tree : blob;
+  is_end_of_queue : bool;
 };
 
 type CanisterWsOpenArguments = record {
   client_nonce : nat64;
+  gateway_principal : GatewayPrincipal;
 };
 
 type CanisterWsOpenResult = variant {
