@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import EnvironmentPlugin from 'vite-plugin-environment';
 import { config } from 'dotenv';
+import { version } from '../../package.json';
 
 config({
   path: "../../.env",
@@ -21,6 +22,7 @@ export default defineConfig({
     EnvironmentPlugin({
       NODE_ENV: process.env.NODE_ENV,
       LOG_LEVEL: 'debug',
+      VERSION: version,
     }),
   ],
   server: {

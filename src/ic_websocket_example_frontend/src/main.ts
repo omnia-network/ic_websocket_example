@@ -6,6 +6,8 @@ import { addMessageToUI } from "./utils";
 import { ic_websocket_example_backend } from "../../declarations/ic_websocket_example_backend";
 import type { AppMessage } from "../../declarations/ic_websocket_example_backend/ic_websocket_example_backend.did";
 
+console.log("Version:", process.env.VERSION);
+
 // production
 const availableGateways = [
   // gateway hosted by Omnia Team on Flux
