@@ -9,25 +9,33 @@ import type { AppMessage } from "../../declarations/ic_websocket_example_backend
 console.log("Version:", process.env.VERSION);
 
 // production
-const availableGateways = [
-  // gateway hosted by Omnia Team on Flux
-  "wss://icwebsocketgateway.app.runonflux.io",
+const defaultGateways = [
   // gateway hosted by Omnia Team on AWS
-  "wss://gateway.icws.io",
+  ["wss://gateway.icws.io", "wss://gateway.icws.io (AWS)"],
+  // gateway hosted by Omnia Team on Flux
+  ["wss://icwebsocketgateway.app.runonflux.io", "wss://icwebsocketgateway.app.runonflux.io (Flux)"],
+  // gateway hosted by Omnia Team on Akash
+  ["wss://akash-gateway.icws.io", "wss://akash-gateway.icws.io (Akash - experimental)"],
 ];
 const icUrl = "https://icp0.io";
 // local test
-// const availableGateways = [
-//   "ws://127.0.0.1:8080",
+// const defaultGateways = [
+//   ["ws://127.0.0.1:8080", "ws://127.0.0.1:8080 (local)"],
 // ];
 // const icUrl = "http://127.0.0.1:4943";
 
-const selectedGateway = new URL(window.location.href).searchParams.get("gw") || availableGateways[0];
+const queryParamGw = new URL(window.location.href).searchParams.get("gw");
+const selectedGateway = queryParamGw
+  ? (defaultGateways.find((gw) => gw[0] === queryParamGw) || [queryParamGw, `${queryParamGw} (custom)`])
+  : defaultGateways[0];
+
+const availableGateways = new Set([...defaultGateways, selectedGateway]);
 
 const backendCanisterId = process.env.CANISTER_ID_IC_WEBSOCKET_EXAMPLE_BACKEND || "";
 
 let messagesCount = 0;
 let isClosed = false;
+let isDemoEnded = false;
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <h1>IC WebSocket demo</h1>
@@ -38,8 +46,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div class="gateway-selector-container">
       <label for="gateway-selector">Gateway:</label>
       <select id="gateway-selector">
-        ${availableGateways
-    .map((gateway) => `<option value="${gateway}" ${gateway === selectedGateway ? 'selected' : ''}>${gateway}</option>`)
+        ${Array.from(availableGateways)
+    .map((gateway) => `<option value="${gateway[0]}" ${gateway[0] === selectedGateway[0] ? 'selected' : ''}>${gateway[1]}</option>`)
     .join("")
   }
       </select>
@@ -62,7 +70,6 @@ const displayErrorMessage = (error: string) => {
     return;
   }
 
-  console.error(error);
   document.getElementById("ws-status-indicator")!.classList.remove("connected");
   document.getElementById("ws-status-indicator")!.classList.add("error");
   document.getElementById("ws-status-content")!.textContent = "WebSocket error";
@@ -75,7 +82,7 @@ const wsConfig = createWsConfig({
   identity: generateRandomIdentity(),
   networkUrl: icUrl,
 });
-const ws = new IcWebSocket(selectedGateway, undefined, wsConfig);
+const ws = new IcWebSocket(selectedGateway[0], undefined, wsConfig);
 
 ws.onopen = () => {
   console.log("WebSocket state:", ws.readyState, "is open:", ws.readyState === ws.OPEN);
@@ -106,6 +113,7 @@ ws.onmessage = (event) => {
   messagesCount += 1;
 
   if (messagesCount === 50) {
+    isDemoEnded = true;
     ws.close();
     console.log("Closing WebSocket after 50 ping-pongs. Reload the page to restart.");
     return;
@@ -129,6 +137,8 @@ ws.onmessage = (event) => {
         return;
       }
 
+      console.error("Error in onmessage callback:", error);
+
       displayErrorMessage(JSON.stringify(error));
     }
   }, 1000);
@@ -138,7 +148,7 @@ ws.onclose = () => {
   document.getElementById("ws-status-indicator")!.classList.remove("connected");
   document.getElementById("ws-status-indicator")!.classList.add("disconnected");
   document.getElementById("ws-status-content")!.innerHTML = `
-    WebSocket closed
+    WebSocket closed ${isDemoEnded ? "(demo ended)" : ""}
     <button id="ws-status-button" class="outline">Restart</button>
   `;
 
@@ -152,13 +162,17 @@ ws.onerror = (event) => {
     return;
   }
 
-  displayErrorMessage(event.error.message);
+  const error = event.error.message;
+
+  console.error("Error in onmessage callback:", error);
+
+  displayErrorMessage(JSON.stringify(error));
 };
 
 document.getElementById("gateway-selector")!.onchange = () => {
   const newGw = (document.getElementById("gateway-selector")! as HTMLSelectElement).value;
 
-  if (newGw === selectedGateway) {
+  if (newGw === selectedGateway[0]) {
     return;
   }
 
