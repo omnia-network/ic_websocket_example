@@ -1,6 +1,6 @@
 {
   "name": "ic_websocket_example",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Internet Computer starter application",
   "keywords": [
     "Internet Computer",
@@ -18,10 +18,10 @@
     "generate": "dfx generate ic_websocket_example_backend"
   },
   "dependencies": {
-    "@dfinity/agent": "^0.20.1",
-    "@dfinity/candid": "^0.20.1",
-    "@dfinity/principal": "^0.20.1",
-    "ic-websocket-js": "^0.3.3"
+    "@dfinity/agent": "^1.0.1",
+    "@dfinity/candid": "^1.0.1",
+    "@dfinity/principal": "^1.0.1",
+    "ic-websocket-js": "^0.3.4"
   },
   "devDependencies": {
     "assert": "2.0.0",
