@@ -31,7 +31,6 @@ The backend canister is a [Rust canister](https://internetcomputer.org/docs/curr
 If you want to test your project locally, follow these preparation steps:
 - make sure you are running an IC WebSocket Gateway locally. See the [IC WebSocket Gateway](https://github.com/omnia-network/ic-websocket-gateway) repository for more details.
 - change the addresses of the local replica and the local IC WebSocket Gateway at the top of the [main.ts](src/ic_websocket_example_frontend/src/main.ts) file.
-- change the `GATEWAY_PRINCIPAL` value in the [lib.rs](src/ic_websocket_example_backend/src/lib.rs) file, using the principal that the IC WebSocket Gateway prints when it starts.
 
 After completing the preparation steps, run the following commands:
 
