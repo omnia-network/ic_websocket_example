@@ -10,7 +10,6 @@ crate-type = ["cdylib"]
 
 [dependencies]
 candid = "0.10"
-ic-cdk = "0.15"
-ic-cdk-macros = "0.15"
-ic-websocket-cdk = "0.4.0"
+ic-cdk = "0.16"
+ic-websocket-cdk = "0.4.1"
 serde = "1.0"

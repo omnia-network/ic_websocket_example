@@ -1,4 +1,4 @@
-use ic_cdk_macros::*;
+use ic_cdk::{init, post_upgrade, query, update};
 
 use canister::{on_close, on_message, on_open, AppMessage};
 use ic_websocket_cdk::{
