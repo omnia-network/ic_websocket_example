@@ -12,12 +12,12 @@ console.log("Version:", process.env.VERSION);
 const defaultGateways = [
   // gateway hosted by Omnia Team on AWS
   ["wss://gateway.icws.io", "wss://gateway.icws.io (AWS)"],
-  // gateway hosted by Omnia Team on Flux
-  ["wss://icwebsocketgateway.app.runonflux.io", "wss://icwebsocketgateway.app.runonflux.io (Flux)"],
+  // gateway hosted by Omnia Team on AWS
+  ["wss://nix-gateway.icws.io", "wss://nix-gateway.icws.io (AWS - NixOS - experimental)"],
   // gateway hosted by Omnia Team on Akash
-  ["wss://akash-gateway.icws.io", "wss://akash-gateway.icws.io (Akash - experimental)"],
+  ["wss://akash-gateway.icws.io", "wss://akash-gateway.icws.io (inactive)"],
 ];
-const icUrl = "https://icp0.io";
+const icUrl = "https://icp-api.io";
 // local test
 // const defaultGateways = [
 //   ["ws://127.0.0.1:8080", "ws://127.0.0.1:8080 (local)"],
