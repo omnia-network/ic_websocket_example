@@ -10,18 +10,13 @@ console.log("Version:", process.env.VERSION);
 
 // production
 const defaultGateways = [
-  // gateway hosted by Omnia Team on AWS
-  ["wss://gateway.icws.io", "wss://gateway.icws.io (AWS)"],
-  // gateway hosted by Omnia Team on AWS
-  ["wss://nix-gateway.icws.io", "wss://nix-gateway.icws.io (AWS - NixOS - experimental)"],
-  // gateway hosted by Omnia Team on Akash
-  ["wss://akash-gateway.icws.io", "wss://akash-gateway.icws.io (inactive)"],
+  // gateway hosted by Omnia Team on DigitalOcean
+  ["wss://gateway.icws.io", "wss://gateway.icws.io (DigitalOcean)"],
+  // local gateway, select if running your own gateway locally
+  ["ws://127.0.0.1:8080", "ws://127.0.0.1:8080 (local)"],
 ];
 const icUrl = "https://icp-api.io";
-// local test
-// const defaultGateways = [
-//   ["ws://127.0.0.1:8080", "ws://127.0.0.1:8080 (local)"],
-// ];
+// if you are running your own gateway locally, use the following URL instead
 // const icUrl = "http://127.0.0.1:4943";
 
 const queryParamGw = new URL(window.location.href).searchParams.get("gw");
