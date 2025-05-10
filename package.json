@@ -18,14 +18,14 @@
     "generate": "dfx generate ic_websocket_example_backend"
   },
   "dependencies": {
-    "@dfinity/agent": "^2.3.0",
-    "@dfinity/candid": "^2.3.0",
-    "@dfinity/identity-secp256k1": "^2.3.0",
-    "@dfinity/principal": "^2.3.0",
+    "@dfinity/agent": "^2.4.1",
+    "@dfinity/candid": "^2.4.1",
+    "@dfinity/identity-secp256k1": "^2.4.1",
+    "@dfinity/principal": "^2.4.1",
     "ic-websocket-js": "^0.5.0"
   },
   "devDependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.5.0"
   },
   "engines": {
     "node": ">=18"

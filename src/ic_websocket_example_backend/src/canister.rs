@@ -1,5 +1,5 @@
 use candid::{decode_one, encode_one, CandidType};
-use ic_cdk::{api::time, print};
+use ic_cdk::api::time;
 use serde::{Deserialize, Serialize};
 
 use ic_websocket_cdk::{
@@ -32,17 +32,17 @@ pub fn on_message(args: OnMessageCallbackArgs) {
         text: String::from("ping"),
         timestamp: time(),
     };
-    print(format!("Received message: {:?}", app_msg));
+    ic_cdk::println!("Received message: {:?}", app_msg);
     send_app_message(args.client_principal, new_msg)
 }
 
 fn send_app_message(client_principal: ClientPrincipal, msg: AppMessage) {
-    print(format!("Sending message: {:?}", msg));
+    ic_cdk::println!("Sending message: {:?}", msg);
     if let Err(e) = send(client_principal, msg.candid_serialize()) {
         println!("Could not send message: {}", e);
     }
 }
 
 pub fn on_close(args: OnCloseCallbackArgs) {
-    print(format!("Client {} disconnected", args.client_principal));
+    ic_cdk::println!("Client {} disconnected", args.client_principal);
 }
